@@ -23,6 +23,9 @@ Route::group(['middleware' => ['guest']], function () {
   //ログイン認証系
   Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
   Route::post('login', 'Auth\LoginController@login')->name('login.post');
+  //ユーザー登録系
+  Route::get('signup', 'Auth\RegisterController@showRegistrationForm')->name('signup.get');
+  Route::post('signup', 'Auth\RegisterController@register')->name('signup.post');
   
 });
 
