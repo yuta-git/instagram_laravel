@@ -8,20 +8,19 @@
     <div class="row">
         <div class="col-sm-6 offset-sm-3">
 
-            <form action="/login" method="POST">
-                {{ csrf_field() }}
+            {!! Form::open(['route' => 'login.post']) !!}
                 <div class="form-group">
-                    <label for="email">メールアドレス</label>
-                    <input type="email" name="email" class="form-control" id="email">
+                    {!! Form::label('email', 'メールアドレス') !!}
+                    {!! Form::email('email', old('email'), ['class' => 'form-control']) !!}
                 </div>
 
                 <div class="form-group">
-                    <label for="password">パスワード</label>
-                    <input type="password" name="password" class="form-control"  id="password">
+                    {!! Form::label('password', 'パスワード') !!}
+                    {!! Form::password('password', ['class' => 'form-control']) !!}
                 </div>
 
-                <button type="submit" class="btn btn-primary btn-block">ログイン</button>
-            </form>
+                {!! Form::submit('ログイン', ['class' => 'btn btn-primary btn-block']) !!}
+            {!! Form::close() !!}
         </div>
     </div>
 @endsection

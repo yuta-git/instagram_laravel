@@ -3,6 +3,6 @@
 @section('content')
     <div class="row">
         <p>{{ Auth::user()->name }}さん、ようこそ！</p>
-        <a href="/logout" class="offset-sm-1 col-sm-4 btn btn-danger">ログアウト</a> 
+        {!! link_to_route('logout.get', 'ログアウト', [], ['class' => 'offset-sm-1 col-sm-4 btn btn-danger']) !!}
     </div>
 @endsection

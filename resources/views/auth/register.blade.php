@@ -8,30 +8,29 @@
     <div class="row">
         <div class="col-sm-6 offset-sm-3">
 
-            <form method="POST" action="/signup">
-                {{ csrf_field() }}
+            {!! Form::open(['route' => 'signup.post']) !!}
                 <div class="form-group">
-                    <label for="name">名前</label>
-                    <input type="text"  name="name" class="form-control" id="name">
+                    {!! Form::label('name', '名前') !!}
+                    {!! Form::text('name', old('name'), ['class' => 'form-control']) !!}
                 </div>
 
                 <div class="form-group">
-                    <label for="email">メールアドレス</label>
-                    <input type="email" name="email" class="form-control" id="email">
+                    {!! Form::label('email', 'メールアドレス') !!}
+                    {!! Form::email('email', old('email'), ['class' => 'form-control']) !!}
                 </div>
 
                 <div class="form-group">
-                    <label for="password">パスワード</label>
-                    <input type="password" name="password"  class="form-control" id="password">
+                    {!! Form::label('password', 'パスワード') !!}
+                    {!! Form::password('password', ['class' => 'form-control']) !!}
                 </div>
 
                 <div class="form-group">
-                    <label for="password_confirmation">パスワードの確認</label>
-                    <input type="password" name="password_confirmation" class="form-control" id="password_confirmation">
+                    {!! Form::label('password_confirmation', 'パスワードの確認') !!}
+                    {!! Form::password('password_confirmation', ['class' => 'form-control']) !!}
                 </div>
 
-                <button type="submit" class="btn btn-primary btn-block">登録</button>
-            </form>
+                {!! Form::submit('登録', ['class' => 'btn btn-primary btn-block']) !!}
+            {!! Form::close() !!}
         </div>
     </div>
 @endsection

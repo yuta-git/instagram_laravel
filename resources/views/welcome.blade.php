@@ -2,7 +2,7 @@
 @section('title', '会員制写真投稿サイト')
 @section('content')
     <div class="row">
-        <a href="/signup" class="offset-sm-1 col-sm-4 btn btn-primary">新規会員登録</a>
-        <a href="/login" class="offset-sm-1 col-sm-4 btn btn-danger">ログイン</a>
+        {!! link_to_route('signup.get', '新規会員登録', [], ['class' => 'offset-sm-1 col-sm-4 btn btn-primary']) !!}
+        {!! link_to_route('login', 'ログイン', [], ['class' => 'offset-sm-1 col-sm-4 btn btn-danger']) !!}
     </div>
 @endsection
