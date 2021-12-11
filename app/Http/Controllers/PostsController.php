@@ -101,7 +101,12 @@ class PostsController extends Controller
      */
     public function edit(Post $post)
     {
-        //
+      // 注目している投稿がログインしている人のものならば
+      if($post->user->id === \Auth::id()) {
+        return view('posts.edit', compact('post'));
+      } else {
+        return redirect('/top');
+      }
     }
 
     /**
@@ -113,7 +118,58 @@ class PostsController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        //
+      // 注目している投稿がログインしているユーザーのものならば
+      if($post->user->id === \Auth::id()) {
+        
+        // validation
+        //for image ref) https://qiita.com/maejima_f/items/7691aa9385970ba7e3ed
+        $this->validate($request, [
+            'title' => 'required',
+            'content' => 'required',
+            'image' => [
+                'file',
+                'mimes:jpeg,jpg,png'
+            ]
+        ]);
+        
+        // 入力情報の取得
+        $title = $request->input('title');
+        $content = $request->input('content');
+        $file =  $request->image;
+      
+        // 画像アップロード
+        // https://qiita.com/ryo-program/items/35bbe8fc3c5da1993366
+        if($file){
+            // 現在時刻ともともとのファイル名を組み合わせてランダムなファイル名作成
+            $image = time() . $file->getClientOriginalName();
+            // アップロードするフォルダ名取得
+            $target_path = public_path('uploads/');
+            // アップロード処理
+            $file->move($target_path, $image);
+        }else{
+            // 画像が選択されていなければ、もとの画像名のまま
+            $image = $post->image;
+        }
+        
+        // 入力情報をもとにインスタンス情報の更新
+        $post->title = $title;
+        $post->content = $content;
+        $post->image = $image;
+        
+        //データベース更新
+        $post->save();
+        
+        // view の呼び出し
+        return redirect('/top')->with('flash_message', '投稿ID: ' . $post->id . 'の画像投稿を更新しました。');
+    
+    //注目している投稿がログインしているユーザーのものじゃなければ、何も処理せずにトップへリダイレクト
+     } else {
+       
+       return redirect('/top');
+       
+     }
+      
+      
     }
 
     /**
@@ -124,6 +180,14 @@ class PostsController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
+      // 注目している投稿がログインしているユーザーのものならば
+      if($post->user->id === \Auth::id()){
+          // データベースから削除
+          $post->delete();
+          // リダイレクト
+          return redirect('/top')->with('flash_message', '投稿id: ' . $post->id . 'の画像投稿を削除しました。');
+      }else{
+          return redirect('/top');
+      }
     }
 }
