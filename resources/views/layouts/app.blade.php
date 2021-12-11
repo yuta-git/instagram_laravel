@@ -25,8 +25,14 @@
                     <ul class="navbar-nav mr-auto"></ul>
                     <ul class="navbar-nav">
                         @if(Auth::check())
+                        <li class="navbar-text text-success bg-white p-2 mr-5">{{ Auth::user()->name }}</li>
                         <li>{!! link_to_route('users.index', '会員一覧', [],['class' => 'nav-link']) !!}</li>
-                        <li>{!! link_to_route('logout.get', 'ログアウト', [],['class' => 'nav-link']) !!}</li>
+                        @if(!Auth::user()->profile()->get()->first())
+                        <li>{!! link_to_route('profiles.create', 'プロフィール登録', [], ['class' => 'nav-link']) !!}</li>
+                        @else
+                        <li>{!! link_to_route('profiles.edit', 'プロフィール編集', ['id' => Auth::user()->profile()->get()->first()->id ], ['class' => 'nav-link']) !!}</li>
+                        @endif
+                         <li>{!! link_to_route('logout.get', 'ログアウト', [],['class' => 'nav-link']) !!}</li>
                         @endif
                     </ul>
                 </div>
