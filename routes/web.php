@@ -47,4 +47,12 @@ Route::group(['middleware' => ['auth']], function () {
   //画像投稿関係
   Route::resource('posts', 'PostsController');
   
+  // ネスト
+  Route::group(['prefix' => 'posts/{id}'], function() {
+    
+    // 投稿に対するコメント
+    Route::post('comment', 'CommentsController@store')->name('comments.store');
+    
+  });
+  
 });

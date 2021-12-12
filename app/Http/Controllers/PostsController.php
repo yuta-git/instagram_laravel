@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Post;
+use App\Comment; // 追加
 use Illuminate\Http\Request;
 
 class PostsController extends Controller
@@ -89,8 +90,13 @@ class PostsController extends Controller
      */
     public function show(Post $post)
     {
+      // 空のCommentモデルを作成
+      $comment = new Comment();
+      // 注目する投稿に紐付いたコメント一覧を取得
+      $comments = $post->comments()->get();
+      
       // view の呼び出し
-      return view('posts.show', compact('post'));
+      return view('posts.show', compact('post', 'comment', 'comments'));
     }
 
     /**
