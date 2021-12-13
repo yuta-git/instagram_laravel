@@ -32,5 +32,13 @@ class Post extends Model
       return $this->hasMany(Comment::class);
     }
     
+    /**
+     * この投稿にいいねをしたユーザー一覧（中間テーブルを介して）
+     */
+    public function favorite_users()
+    {
+        return $this->belongsToMany(User::class, 'favorites', 'post_id', 'user_id')->withTimestamps();
+    }
+    
     
 }

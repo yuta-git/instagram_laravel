@@ -72,5 +72,51 @@ class User extends Authenticatable
         $comment->save();
     }
     
+    /**
+     * このユーザーがいいねをした投稿一覧（中間テーブルを介して取得）
+     */
+    public function favorites()
+    {
+        return $this->belongsToMany(Post::class, 'favorites', 'user_id', 'post_id')->withTimestamps();
+    }
+    
+    // いいね追加
+    public function favorite($post_id)
+    {
+        // 既にいいねしているかの確認
+        $exist = $this->is_favorite($post_id);
+    
+        if ($exist) {
+            // 既にいいねしていれば何もしない
+            return false;
+        } else {
+            // いいねしていないのであればいいねする
+            $this->favorites()->attach($post_id);
+            return true;
+        }
+    }
+    
+    // いいね解除
+    public function unfavorite($post_id)
+    {
+        // 既にいいねしているかの確認
+        $exist = $this->is_favorite($post_id);
+    
+        if ($exist) {
+            // 既にいいねしていればいいねを解除
+            $this->favorites()->detach($post_id);
+            return true;
+        } else {
+            // いいねしていない場合
+            return false;
+        }
+    }
+    
+    // 注目する投稿がすでにいいねされているか判定
+    public function is_favorite($post_id)
+    {
+        return $this->favorites()->where('post_id', $post_id)->exists();
+    }
+    
     
 }

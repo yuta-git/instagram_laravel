@@ -90,13 +90,15 @@ class PostsController extends Controller
      */
     public function show(Post $post)
     {
-      // 空のCommentモデルを作成
-      $comment = new Comment();
-      // 注目する投稿に紐付いたコメント一覧を取得
-      $comments = $post->comments()->get();
-      
-      // view の呼び出し
-      return view('posts.show', compact('post', 'comment', 'comments'));
+        // 空のCommentモデル作成
+        $comment = new Comment();
+        // 注目する投稿に紐づいたコメント一覧を取得
+        $comments = $post->comments()->get();
+        // 注目する投稿にいいねをした人の一覧を取得
+        $favorite_users = $post->favorite_users()->get();
+        
+        // view の呼び出し
+        return view('posts.show', compact('post', 'comment', 'comments', 'favorite_users'));
     }
 
     /**

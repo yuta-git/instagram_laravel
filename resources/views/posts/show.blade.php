@@ -12,6 +12,9 @@
             <th>内容</th>
             <th>画像</th>
             <th>投稿日時</th>
+            <th>いいね/いいいね解除</th>
+            <th>いいねの数</th>
+            <th>いいねした人の一覧</th>
         </tr>
         <tr>
             <td>{{ $post->id }}</td>
@@ -20,17 +23,38 @@
             <td>{{ $post->content }}</td>
             <td><img src="{{ asset('uploads')}}/{{$post->image}}" alt="{{ $post->image }}"></td>
             <td>{{ $post->created_at }}</td>
+            <td>
+                @if(!Auth::user()->is_favorite($post->id))
+                {!! Form::open(['route' => ['posts.favorite', 'id' => $post->id ]]) !!}
+                    {!! Form::submit('いいね', ['class' => 'btn btn-primary btn-block']) !!}
+                {!! Form::close() !!}
+                @else
+                {!! Form::open(['route' => ['posts.unfavorite', 'id' => $post->id ], 'method' => 'DELETE']) !!}
+                    {!! Form::submit('いいね解除', ['class' => 'btn btn-danger btn-block']) !!}
+                {!! Form::close() !!}
+                @endif
+            </td>
+            <td>{{ count($favorite_users) }}いいね</td>
+            <td>
+                <ul>
+                    @foreach($favorite_users as $user)
+                    <li>{!! link_to_route('users.show', $user->name , ['id' => $user->id ],[]) !!}</li>
+                    @endforeach
+                </ul>
+            </td>
+            <td></td>
         </tr>
     </table>
-    
+
     @if($post->user->id === Auth::id())
-        <div class="row mt-3">
-            {!! link_to_route('posts.edit', '編集' , ['id' => $post->id ],['class' => 'btn btn-primary col-sm-6']) !!}
-            
-            {!! Form::open(['route' => ['posts.destroy', 'id' => $post->id ], 'method' => 'DELETE', 'class' => 'col-sm-6']) !!}
-                {!! Form::submit('削除', ['class' => 'btn btn-danger btn-block col-sm-12']) !!}
-            {!! Form::close() !!}
-        </div>
+    <div class="row mt-3">
+        {!! link_to_route('posts.edit', '編集' , ['id' => $post->id ],['class' => 'btn btn-primary col-sm-6']) !!}
+        
+        {!! Form::open(['route' => ['posts.destroy', 'id' => $post->id ], 'method' => 'DELETE', 'class' => 'col-sm-6']) !!}
+            {!! Form::submit('削除', ['class' => 'btn btn-danger btn-block col-sm-12']) !!}
+        {!! Form::close() !!}
+
+    </div>
     @endif
     
     <div class="text-center mt-5">
@@ -48,7 +72,6 @@
             {!! Form::close() !!}
         </div>
     </div>
-    
     @if(count($comments) !== 0)
     <table class="table table-bordered table-striped mt-3">
         <tr>
