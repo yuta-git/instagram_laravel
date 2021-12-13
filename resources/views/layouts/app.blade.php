@@ -33,6 +33,7 @@
                         <li>{!! link_to_route('profiles.edit', 'プロフィール編集', ['id' => Auth::user()->profile()->get()->first()->id ], ['class' => 'nav-link']) !!}</li>
                         @endif
                         <li>{!! link_to_route('posts.create', '新規画像投稿', [],['class' => 'nav-link']) !!}</li>
+                        <li>{!! link_to_route('users.favorites', 'お気に入り投稿一覧', ['id' => Auth::id() ],['class' => 'nav-link']) !!}</li>
                         <li>{!! link_to_route('logout.get', 'ログアウト', [],['class' => 'nav-link']) !!}</li>
                         @endif
                     </ul>

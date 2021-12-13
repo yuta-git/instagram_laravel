@@ -33,7 +33,7 @@ Route::group(['middleware' => ['guest']], function () {
 Route::group(['middleware' => ['auth']], function () {
     
     // ログイン後のリダイレクト先
-    Route::get('/top', 'PostsController@index');
+    Route::get('top', 'PostsController@index');
     
     // ログアウト
     Route::get('logout', 'Auth\LoginController@logout')->name('logout.get');
@@ -48,6 +48,11 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('posts', 'PostsController');
     
     // ネスト
+    Route::group(['prefix' => 'users/{id}'], function () {
+        // いいねした投稿一覧
+        Route::get('favorites', 'UsersController@favorites')->name('users.favorites');
+    });
+    
     Route::group(['prefix' => 'posts/{id}'], function () {
         // 投稿に対するコメント
         Route::post('comments', 'CommentsController@store')->name('comments.store');

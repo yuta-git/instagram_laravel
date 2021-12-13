@@ -13,6 +13,7 @@
             <p>ニックネーム / {{ $profile->nickname }}</p>
             <p>性別 / {{ $profile->gender === 'man' ? '男性' : '女性' }}</p>
             <p>自己紹介 / {{ $profile->introduction }}</p>
+            <p>{!! link_to_route('users.favorites', 'お気に入り投稿一覧', ['id' => $user->id ],['class' => 'nav-link']) !!}</p>
         </div>
     </div>
     @else

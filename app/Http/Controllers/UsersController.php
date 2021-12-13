@@ -38,5 +38,11 @@ class UsersController extends Controller
         return view('users.show', compact('user', 'profile', 'posts'));
     }
 
+    // 注目しているユーザーが、いいねした投稿一覧
+    public function favorites($id){
+        $user = User::find($id);
+        $posts = $user->favorites()->get();
+        return view('users.favorites', compact('user', 'posts'));
+    }
 
 }
