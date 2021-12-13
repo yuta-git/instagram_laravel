@@ -29,10 +29,13 @@ class UsersController extends Controller
      */
     public function show(User $user)
     {
-        // 注目しているユーザーのプロフィールデータ取得
+        // 注目しているユーザのプロフィールデータ取得
         $profile = $user->profile()->get()->first();
-        // viewの呼び出し
-        return view('users.show', compact('user', 'profile'));
+        // 注目しているユーザの投稿一覧取得
+        $posts = $user->posts()->get();
+
+        // view の呼び出し
+        return view('users.show', compact('user', 'profile', 'posts'));
     }
 
 

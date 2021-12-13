@@ -108,7 +108,7 @@ class PostsController extends Controller
     public function edit(Post $post)
     {
       // 注目している投稿がログインしている人のものならば
-      if($post->user->id === \Auth::id()) {
+      if($post->user()->get()->first()->id === \Auth::id()) {
         return view('posts.edit', compact('post'));
       } else {
         return redirect('/top');
