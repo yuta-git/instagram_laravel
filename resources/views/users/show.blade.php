@@ -13,7 +13,6 @@
             <p>ニックネーム / {{ $profile->nickname }}</p>
             <p>性別 / {{ $profile->gender === 'man' ? '男性' : '女性' }}</p>
             <p>自己紹介 / {{ $profile->introduction }}</p>
-            <p>{!! link_to_route('users.favorites', 'お気に入り投稿一覧', ['id' => $user->id ],['class' => 'nav-link']) !!}</p>
         </div>
     </div>
     @else
@@ -21,12 +20,32 @@
         <p class="col-sm-12 text-center">プロフィールは未設定です</p>
     </div>
     @endif
+    <div class="row mt-5">
+        
+        @if (Auth::id() != $user->id)
+            @if (Auth::user()->is_following($user->id))
+                {!! Form::open(['route' => ['user.unfollow', $user->id], 'method' => 'delete', 'class' => 'offset-sm-3 col-sm-6']) !!}
+                    {!! Form::submit('フォロー解除', ['class' => "btn btn-danger btn-block"]) !!}
+                {!! Form::close() !!}
+            @else
+                {!! Form::open(['route' => ['user.follow', $user->id], 'class' => 'offset-sm-3 col-sm-6']) !!}
+                    {!! Form::submit('フォロー', ['class' => "btn btn-primary btn-block"]) !!}
+                {!! Form::close() !!}
+            @endif
+        @endif
+    </div>
+    <div class="row mt-3">
+        <p class="col-sm-4">{!! link_to_route('users.favorites', 'お気に入り投稿一覧(' . $user->favorites()->count() . ')', ['id' => $user->id ],['class' => 'nav-link text-center']) !!}</p>
+        <p class="col-sm-4">{!! link_to_route('users.followings', 'フォロー一覧(' . $user->followings()->count() . ')', ['id' => $user->id ],['class' => 'nav-link text-center']) !!}</p>
+        <p class="col-sm-4">{!! link_to_route('users.followers', 'フォローワー一覧(' . $user->followers()->count() . ')', ['id' => $user->id ],['class' => 'nav-link text-center']) !!}</p>
+    </div>
     
     @if(count($posts) !== 0)
     <div class="text-center mt-5">
         <h2>{{ $user->name }} さんの投稿一覧</h2>
     </div>
      <div class="row mt-3">
+        <p>投稿数: {{ $posts->total() }}</p>
         <table class="table table-bordered table-striped">
             <tr>
                 <th>ID</th>
