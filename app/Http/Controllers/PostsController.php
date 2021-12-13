@@ -16,9 +16,8 @@ class PostsController extends Controller
     public function index()
     {
         // Postモデルを使って全投稿を取得
-        $posts = Post::orderBy('id', 'desc')->get();
-        
-        //ビューの呼び出し
+        $posts = Post::orderBy('id', 'desc')->paginate(10);
+        // ビューの呼び出し
         return view('top', compact('posts'));
     }
 

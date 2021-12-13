@@ -3,7 +3,9 @@
 @section('content')
     <div class="text-center">
         <h1>投稿一覧</h1>
+        @if($posts->total() !== 0)
         <div class="row mt-3">
+            <p>投稿件数: {{ $posts->total() }}件</p>
             <table class="table table-bordered table-striped">
                 <tr>
                     <th>ID</th>
@@ -29,6 +31,10 @@
                 </tr>
                 @endforeach
             </table>
+            {{ $posts->links('pagination::bootstrap-4') }}
         </div>
+        @else
+        <h2 class="mt-3 text-center">投稿はまだありません</h2>
+        @endif
     </div>
 @endsection

@@ -45,6 +45,7 @@
             </tr>
             @endforeach
         </table>
+        {{ $posts->links('pagination::bootstrap-4') }}
     </div>
     @else
     <div class="row mt-5">

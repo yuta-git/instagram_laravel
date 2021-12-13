@@ -5,6 +5,7 @@
         <h1>会員一覧</h1>
     </div>
     <div class="row mt-3">
+        <p>登録人数: {{ $users->total() }}人</p>
         <table class="table table-bordered table-striped">
             <tr>
                 <th>ID</th>
@@ -28,5 +29,7 @@
             </tr>
             @endforeach
         </table>
+        {{ $users->links('pagination::bootstrap-4') }}
+        
     </div>
 @endsection
