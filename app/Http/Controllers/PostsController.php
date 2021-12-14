@@ -197,4 +197,15 @@ class PostsController extends Controller
           return redirect('/top');
       }
     }
+    
+    // いいねランキング表示
+    public function rankings(){
+      //いいね数が多い順に投稿のデータを取得(今回は上位3件)
+      // Postモデルにある　favorite_users というリレーション名を使う
+      $posts = Post::withCount('favorite_users')->orderBy('favorite_users_count','desc')->paginate();
+
+      // view の呼び出し
+      return view('posts.rankings', compact('posts')); 
+    }
+    
 }

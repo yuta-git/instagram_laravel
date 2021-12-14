@@ -27,6 +27,7 @@
                         @if(Auth::check())
                         <li class="navbar-text text-success bg-white p-2 mr-5">{{ Auth::user()->name }}</li>
                         <li>{!! link_to_route('users.timelines', 'タイムライン', [],['class' => 'nav-link']) !!}</li>
+                        <li>{!! link_to_route('posts.rankings', 'いいね投稿ラインキング', [],['class' => 'nav-link']) !!}</li>
                         <li>{!! link_to_route('users.index', '会員一覧', [],['class' => 'nav-link']) !!}</li>
                         @if(!Auth::user()->profile()->get()->first())
                         <li>{!! link_to_route('profiles.create', 'プロフィール登録', [], ['class' => 'nav-link']) !!}</li>
