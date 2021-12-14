@@ -53,6 +53,9 @@ Route::group(['middleware' => ['auth']], function () {
     // いいねランキング
     Route::get('rankings', 'PostsController@rankings')->name('posts.rankings');
     
+    // キーワード検索
+    Route::get('search', 'PostsController@search')->name('posts.search');
+    
     // ネスト(ユーザー)
     Route::group(['prefix' => 'users/{id}'], function () {
         // いいねした投稿一覧

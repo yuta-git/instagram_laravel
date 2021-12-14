@@ -1,8 +1,23 @@
 @extends('layouts.app')
 @section('title',  '投稿一覧')
 @section('content')
+    @if (isset($flash_message))
+      <p class="alert alert-success" role="alert">{{ $flash_message }}</p>
+    @endif
     <div class="text-center">
         <h1>投稿一覧</h1>
+        <div class="row">
+            <div class="col-sm-6 offset-sm-3">
+    
+                {!! Form::open(['route' => ['posts.search'], 'method' => 'get']) !!}
+                    <div class="form-group">
+                        {!! Form::label('keyword', 'キーワード') !!}
+                        {!! Form::text('keyword', old('title'), ['class' => 'form-control']) !!}
+                    </div>
+                    {!! Form::submit('検索', ['class' => 'btn btn-primary btn-block']) !!}
+                {!! Form::close() !!}
+            </div>
+        </div>
         @if($posts->total() !== 0)
         <div class="row mt-3">
             <p>投稿件数: {{ $posts->total() }}件</p>
@@ -34,7 +49,9 @@
             {{ $posts->links('pagination::bootstrap-4') }}
         </div>
         @else
-        <h2 class="mt-3 text-center">投稿はまだありません</h2>
+        <div class="row">
+            <h2 class="mt-3 offset-sm-3 col-sm-6 text-center">投稿はありません</h2>
+        </div>
         @endif
     </div>
 @endsection
