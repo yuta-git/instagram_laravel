@@ -7,7 +7,7 @@
     @if($profile)
     <div class="row mt-5">
         <div class="offset-sm-2 col-sm-3">
-            <img src="{{ asset('uploads')}}/{{ $profile->image }}" alt="no image" class="image_icon">
+            <img src="{{ Storage::disk('s3')->url('uploads/' . $profile->image) }}" alt="no image" class="image_icon">
         </div>
         <div class="offset-sm-1 col-sm-3 pt-3">
             <p>ニックネーム / {{ $profile->nickname }}</p>

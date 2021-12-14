@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Profile;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProfilesController extends Controller
 {
@@ -24,10 +25,10 @@ class ProfilesController extends Controller
      */
     public function create()
     {
-      //空のプロフィールインスタンス作成
-      $profile = new Profile();
-      // view の呼び出し
-      return view('profiles.create', compact('profile'));
+        // 空のプロフィールインスタンス作成
+        $profile = new Profile();
+        // view の呼び出し
+        return view('profiles.create', compact('profile'));
     }
 
     /**
@@ -40,44 +41,36 @@ class ProfilesController extends Controller
     {
         // validation        
         //for image ref) https://qiita.com/maejima_f/items/7691aa9385970ba7e3ed
-      $this->validate($request, [
-          'nickname' => 'required',
-          'gender' => 'required',
-          'introduction' => 'required',
-          'image' => [
-              'required',
-              'file',
-              'mimes:jpeg,jpg,png'
-          ]
-      ]);
-      
+        $this->validate($request, [
+            'nickname' => 'required',
+            'gender' => 'required',
+            'introduction' => 'required',
+            'image' => [
+                'required',
+                'file',
+                'mimes:jpeg,jpg,png'
+            ]
+        ]);
+        
         // 入力情報の取得
         $nickname = $request->input('nickname');
         $gender = $request->input('gender');
         $introduction = $request->input('introduction');
-        $file =  $request->image;
+        $file = $request->file('image');
         
-        // https://qiita.com/ryo-program/items/35bbe8fc3c5da1993366
-        // 画像ファイルのアップロード
-        if($file) {
-          // 現在時刻と元々のファイル名を組み合わせてランダムなファイル名を作成
-          $image = time() . $file->getClientOriginalName();
-          //アップロードするフォルダ名を取得
-          $target_path = public_path('uploads/');
-          //アップロード処理
-          $file->move($target_path, $image);
-          
-        } else {
-          //画像ファイルが選択されていなければ、からの文字列をセット
-          $image = '';
-        }
+        // S3用
+        $path = Storage::disk('s3')->putFile('/uploads', $file, 'public');
+ 
+        // パスから、最後の「ファイル名.拡張子」の部分だけ取得
+        $image = basename($path);
         
-        //入力情報を基に新しいインスタンスを作成
+        
+        // 入力情報をもとに新しいインスタンス作成
         \Auth::user()->profile()->create(['nickname' => $nickname, 'gender' => $gender, 'introduction' => $introduction, 'image' => $image]);
         
-        //トップページへリダイレクト
+        // トップページへリダイレクト
         return redirect('/top')->with('flash_message', 'プロフィールを作成しました');
-      
+
     }
 
     /**
@@ -99,15 +92,13 @@ class ProfilesController extends Controller
      */
     public function edit(Profile $profile)
     {
-      
-      //ログインしているのが自分のプロフィールの場合
-      if($profile->user_id === \Auth::id()) {
-        // view の呼び出し
-        return view('profiles.edit', compact('profile'));
-      }else{
-        return redirect('/top');
-      }
-      
+        // ログインしている自分のプロフィールの場合
+        if($profile->user_id === \Auth::id()){
+            // view の呼び出し
+            return view('profiles.edit', compact('profile'));
+        }else{
+            return redirect('/top');
+        }
     }
 
     /**
@@ -140,14 +131,12 @@ class ProfilesController extends Controller
             $file =  $request->image;
             
             // 画像ファイルのアップロード
-            // https://qiita.com/ryo-program/items/35bbe8fc3c5da1993366
             if($file){
-                // 現在時刻ともともとのファイル名を組み合わせてランダムなファイル名作成
-                $image = time() . $file->getClientOriginalName();
-                // アップロードするフォルダ名取得
-                $target_path = public_path('uploads/');
-                // アップロード処理
-                $file->move($target_path, $image);
+                // S3用
+                $path = Storage::disk('s3')->putFile('/uploads', $file, 'public');
+         
+                // パスから、最後の「ファイル名.拡張子」の部分だけ取得
+                $image = basename($path);
             }else{
                 // 画像を選択していなければ、画像ファイルは元の名前のまま
                 $image = $profile->image;
@@ -181,3 +170,4 @@ class ProfilesController extends Controller
         //
     }
 }
+

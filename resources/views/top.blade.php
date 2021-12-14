@@ -34,9 +34,9 @@
                     <td>{!! link_to_route('posts.show', $post->id , ['id' => $post->id ],[]) !!}</td>
                     <td>
                         @if($post->user->profile)
-                        <img src="{{ asset('uploads')}}/{{ $post->user->profile->image }}" alt="{{ $post->user->profile->image }}" class="avatar">
+                        <img src="{{ Storage::disk('s3')->url('uploads/' . $post->user->profile->image) }}" alt="{{ $post->user->profile->image }}" class="avatar">
                         @else
-                        <img src="{{ asset('images/no_image.jpg') }}" alt="アバター画像は未設定です" class="avatar">
+                        <img src="{{ Storage::disk('s3')->url('uploads/' . 'images/no_image.jpg') }}" alt="アバター画像は未設定です" class="avatar">
                         @endif
                         {!! link_to_route('users.show', $post->user->name , ['id' => $post->user->id ],[]) !!}
                     </td>

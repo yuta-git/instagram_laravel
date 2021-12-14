@@ -26,7 +26,7 @@
                     {!! Form::text('introduction',  $profile->introduction ? $profile->introduction : old('introduction'), ['class' => 'form-control']) !!}
                 </div>
                 <div class="offset-sm-3 col-sm-6 mb-3">
-                    <img id="" src="{{ asset('uploads')}}/{{ $profile->image }}" alt="no image" class="image_icon">
+                    <img src="{{ Storage::disk('s3')->url('uploads/' . $profile->image) }}" alt="no image" class="image_icon">
                 </div>
                 <div class="form-group">
                     {!! Form::label('image', 'アバターアイコン') !!}
